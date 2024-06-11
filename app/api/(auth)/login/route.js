@@ -32,13 +32,13 @@ export async function POST(req) {
   const accessToken = jwt.sign(
     { uid: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "30d" }
   );
 
   const refreshToken = jwt.sign(
     { uid: user._id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "30d" }
+    { expiresIn: "365d" }
   );
 
   const newUser = await User.findOne({ username })
@@ -52,7 +52,7 @@ export async function POST(req) {
     value: refreshToken,
     path: "/",
     httpOnly: true,
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 365 * 24 * 60 * 60,
     secure: true,
     sameSite: "strict",
   });

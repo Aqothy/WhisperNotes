@@ -4,13 +4,18 @@ import { useState } from "react";
 import useAxiosInt from "@/hooks/useAxiosInt";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { addUser } from "@/redux/features/userSlice";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function UpdateForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
-  const { axiosInstance, eject } = useAxiosInt();
+  const { axiosInstance } = useAxiosInt();
+  const { user } = useSelector((state) => state.user);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   async function submit(e) {
     try {
@@ -20,7 +25,7 @@ export default function UpdateForm() {
         password,
         oldPassword,
       });
-      eject();
+      dispatch(addUser({...user, username}));
       router.push("/home");
       toast.success(data.msg);
       if (data?.passwordUpdate) {

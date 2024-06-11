@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PersistLogin from "@/components/ux/PersistLogin";
 import Redirect from "@/components/ux/Redirect";
 import CheckLoading from "@/components/ux/CheckLoading";
+import GetUser from "@/hooks/useGetUser";
 
 export const metadata = {
   title: "Cipher notes",
@@ -32,9 +33,11 @@ export default function RootLayout({ children }) {
         <ToastContainer />
         <ReduxProvider>
           <PersistLogin>
-            <CheckLoading>
-              <Redirect>{children}</Redirect>
-            </CheckLoading>
+            <GetUser>
+              <CheckLoading>
+                <Redirect>{children}</Redirect>
+              </CheckLoading>
+            </GetUser>
           </PersistLogin>
         </ReduxProvider>
       </body>

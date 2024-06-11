@@ -8,6 +8,7 @@ import { setTokenLoading } from "@/redux/features/tokenSlice";
 export default function PersistLogin({ children }) {
   const dispatch = useDispatch();
   const refresh = useRefresh();
+  const { token } = useSelector((state) => state.token);
 
   useEffect(() => {
     async function verifyRefresh() {
@@ -18,7 +19,7 @@ export default function PersistLogin({ children }) {
         dispatch(setTokenLoading(false));
       }
     }
-    verifyRefresh();
+    !token ? verifyRefresh() : dispatch(setTokenLoading(false));
   }, []);
 
   return children;

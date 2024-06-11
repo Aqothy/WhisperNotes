@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import useRefresh from "./useRefresh";
 import { useSelector } from "react-redux";
 
+//dont have to use axios interceptors, you can just use middleware to refresh the token
 export default function useAxiosInt() {
   const refresh = useRefresh();
   const { token } = useSelector((state) => state.token);
@@ -11,11 +12,13 @@ export default function useAxiosInt() {
   const axiosInstance = axios.create({
     baseURL: "/api",
   });
+
   let reqInt, resInt;
 
   useEffect(() => {
     reqInt = axiosInstance.interceptors.request.use(
       (config) => {
+
         if (!config.headers.Authorization) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -39,12 +42,13 @@ export default function useAxiosInt() {
         throw new Error(err.response.data.msg);
       }
     );
+
+    return () => {
+      axiosInstance.interceptors.response.eject(resInt);
+      axiosInstance.interceptors.request.eject(reqInt);
+    }
+
   }, [token, refresh]);
 
-  function eject() {
-    axiosInstance.interceptors.response.eject(resInt);
-    axiosInstance.interceptors.request.eject(reqInt);
-  }
-
-  return { axiosInstance, eject };
+  return { axiosInstance };
 }

@@ -2,21 +2,23 @@
 
 import useAxiosInt from "@/hooks/useAxiosInt";
 import { toast } from "react-toastify";
-import useGetUser from "@/hooks/useGetUser";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { addUser } from "@/redux/features/userSlice";
 
 export default function CreateNote() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const { axiosInstance, eject } = useAxiosInt();
-  const getUser = useGetUser();
+  const { axiosInstance } = useAxiosInt();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
   async function submit(e) {
     e.preventDefault();
     try {
       const { data } = await axiosInstance.post("/notes", { title, text });
-      await getUser();
-      eject();
+      dispatch(addUser({ ...user, notes: [...user.notes, data.note] }));
       setTitle("")
       setText("");
       toast.success(data.msg);

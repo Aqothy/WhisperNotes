@@ -29,7 +29,7 @@ export async function GET(req) {
   const accessToken = jwt.sign(
     { uid: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "30d" }
   );
 
   return NextResponse.json({ accessToken, user });

@@ -24,7 +24,7 @@ export async function POST(req) {
 
     if (note) {
       //201 means resource been created
-      return NextResponse.json({ msg: "New note created!" }, { status: 201 });
+      return NextResponse.json({ msg: "New note created!", note}, { status: 201 });
     } else {
       return NextResponse.json({ msg: "Invalid note data" }, { status: 400 });
     }
@@ -58,7 +58,7 @@ export async function PUT(req) {
 
     await note.save();
 
-    return NextResponse.json({ msg: "Note updated!" });
+    return NextResponse.json({ msg: "Note updated!", note});
   } catch (error) {
     return NextResponse.json({ msg: error.message }, { status: 401 });
   }

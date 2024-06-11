@@ -9,12 +9,12 @@ import { logout } from "@/redux/features/tokenSlice";
 
 export default function DeleteUser() {
   const dispatch = useDispatch();
-  const { axiosInstance, eject } = useAxiosInt();
+  const { axiosInstance} = useAxiosInt();
   const router = useRouter();
   async function deleteAcc() {
     try {
       const { data } = await axiosInstance.delete("/users");
-      eject();
+
       dispatch(logoutUser());
       dispatch(logout());
       toast.success(data.msg);

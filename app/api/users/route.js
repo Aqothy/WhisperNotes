@@ -104,7 +104,6 @@ export async function PUT(req) {
 
     if (password && oldPassword) {
       match = await bcrypt.compare(oldPassword, user.password);
-      console.log(match)
       if (match) {
         user.password = await bcrypt.hash(password, salt);
       }

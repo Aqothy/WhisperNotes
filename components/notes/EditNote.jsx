@@ -1,27 +1,28 @@
 "use client";
 
-import { useSelector } from "react-redux";
 import { selectNoteById } from "@/redux/features/userSlice";
 import { useState } from "react";
 import useAxiosInt from "@/hooks/useAxiosInt";
 import { toast } from "react-toastify";
-import useGetUser from "@/hooks/useGetUser";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addUser } from "@/redux/features/userSlice";
 
 export default function EditNote({ id }) {
   const note = useSelector((state) => selectNoteById(state, id));
   const [title, setTitle] = useState(note.title);
   const [text, setText] = useState(note.text);
-  const { axiosInstance, eject } = useAxiosInt();
-  const getUser = useGetUser();
+  const { axiosInstance } = useAxiosInt();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
   async function submit(e) {
     e.preventDefault();
     try {
       const { data } = await axiosInstance.put("/notes", { id, title, text });
-      await getUser();
-      eject();
+      dispatch(addUser({ ...user, notes: user.notes.map((note) => note._id === id ? data.note : note) }));
       router.push("/home");
       toast.success(data.msg);
     } catch (error) {

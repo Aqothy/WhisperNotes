@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   token: null,
-  tokenLoading: true
+  tokenLoading: true,
 };
 
 export const tokenSlice = createSlice({
@@ -13,13 +13,13 @@ export const tokenSlice = createSlice({
       state.token = action.payload;
     },
     logout: (state) => {
-      state.token = null
+      state.token = null;
     },
     setTokenLoading: (state, action) => {
-      state.tokenLoading = action.payload
-    }
+      state.tokenLoading = action.payload;
+    },
   },
 });
 
-export const { setToken, logout, setTokenLoading} = tokenSlice.actions;
+export const { setToken, logout, setTokenLoading } = tokenSlice.actions;
 export default tokenSlice.reducer;
